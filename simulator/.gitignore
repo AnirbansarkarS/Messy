@@ -1,0 +1,9 @@
+# Java build outputs
+build/
+out/
+*.class
+
+# Local/system files
+*.log
+.DS_Store
+Thumbs.db
