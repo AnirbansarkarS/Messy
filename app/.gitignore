@@ -1,8 +1,1 @@
-# Build outputs
-build/
-out/
-
-# Local/system files
-*.log
-.DS_Store
-Thumbs.db
+/build
