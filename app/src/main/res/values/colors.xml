@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="message_outgoing">#FF1E88E5</color>
+    <color name="message_incoming">#FFF1F5F9</color>
+    <color name="message_incoming_text">#FF0F172A</color>
+    <color name="message_outgoing_text">#FFFFFFFF</color>
+    <color name="surface_soft">#FFF8FAFC</color>
 </resources>
