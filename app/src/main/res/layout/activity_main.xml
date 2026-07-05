@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="12dp"
-        android:text="@string/no_conversations"
+        android:text="@string/app_tagline"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
     <TextView
@@ -34,7 +34,7 @@
         android:text="@string/start_chat_hint"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/conversationsRecyclerView"
