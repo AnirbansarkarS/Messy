@@ -3,13 +3,13 @@ package com.messy.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.messy.app.chat.ChatActivity;
 import com.messy.app.chat.ConversationAdapter;
 import com.messy.app.chat.ConversationSummary;
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final ConversationAdapter conversationAdapter = new ConversationAdapter(this::openConversation);
     private MessageDao messageDao;
-    private TextView emptyView;
+    private View emptyStateLayout;
     private RecyclerView conversationsRecyclerView;
 
     @Override
@@ -37,14 +37,20 @@ public class MainActivity extends AppCompatActivity {
 
         messageDao = AppDatabase.getInstance(this).messageDao();
 
+        // Toolbar
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Conversations
         conversationsRecyclerView = findViewById(R.id.conversationsRecyclerView);
         conversationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         conversationsRecyclerView.setAdapter(conversationAdapter);
 
-        emptyView = findViewById(R.id.emptyView);
+        emptyStateLayout = findViewById(R.id.emptyStateLayout);
 
-        Button openSavedMessagesButton = findViewById(R.id.openSavedMessagesButton);
-        openSavedMessagesButton.setOnClickListener(v -> openSavedMessages());
+        // FAB
+        ExtendedFloatingActionButton fab = findViewById(R.id.openSavedMessagesButton);
+        fab.setOnClickListener(v -> openSavedMessages());
     }
 
     @Override
@@ -59,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
             List<ConversationSummary> conversations = buildConversationSummaries(messages);
             AppExecutors.postToMain(() -> {
                 conversationAdapter.setConversations(conversations);
-                emptyView.setVisibility(conversations.isEmpty() ? View.VISIBLE : View.GONE);
-                conversationsRecyclerView.setVisibility(conversations.isEmpty() ? View.GONE : View.VISIBLE);
+                boolean empty = conversations.isEmpty();
+                emptyStateLayout.setVisibility(empty ? View.VISIBLE : View.GONE);
+                conversationsRecyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
             });
         });
     }

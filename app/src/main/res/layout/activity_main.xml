@@ -1,54 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/surface_soft"
-    android:padding="16dp"
+    android:background="@color/color_background"
     tools:context=".MainActivity">
 
-    <TextView
+    <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-        android:textStyle="bold" />
+        android:elevation="0dp"
+        app:liftOnScroll="true">
 
-    <TextView
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:paddingHorizontal="8dp"
+            style="@style/MessyToolbar"
+            app:title="@string/app_name"
+            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
+            app:subtitle="@string/app_tagline"
+            app:subtitleTextAppearance="@style/TextAppearance.Material3.BodySmall" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Content -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="12dp"
-        android:text="@string/app_tagline"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
-        android:id="@+id/emptyView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:padding="20dp"
-        android:text="@string/start_chat_hint"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-        android:visibility="visible" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/conversationsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingBottom="12dp"
-        tools:listitem="@layout/item_conversation" />
+            <!-- Empty state -->
+            <LinearLayout
+                android:id="@+id/emptyStateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingTop="80dp"
+                android:paddingBottom="40dp"
+                android:visibility="visible">
 
-    <com.google.android.material.button.MaterialButton
+                <TextView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:background="@drawable/avatar_circle"
+                    android:gravity="center"
+                    android:text="✦"
+                    android:textColor="@color/white"
+                    android:textSize="26sp" />
+
+                <TextView
+                    android:id="@+id/emptyView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="No chats yet"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                    android:textColor="@color/color_on_surface" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Tap the button below to start messaging"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="@color/color_on_surface_variant" />
+
+            </LinearLayout>
+
+            <!-- Conversation list -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/conversationsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:visibility="gone"
+                tools:listitem="@layout/item_conversation" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- FAB -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/openSavedMessagesButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/open_saved_messages" />
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:text="@string/open_saved_messages"
+        app:icon="@android:drawable/ic_menu_save"
+        app:iconTint="@color/white"
+        app:backgroundTint="@color/color_primary"
+        app:elevation="6dp" />
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

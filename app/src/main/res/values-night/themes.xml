@@ -1,7 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.Messy" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#7986CB</item>
+        <item name="colorPrimaryContainer">#2C3275</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#9FA8DA</item>
+        <item name="colorSurface">#1E1F2E</item>
+        <item name="colorSurfaceVariant">#2A2B3D</item>
+        <item name="colorOnSurface">#E8E8F0</item>
+        <item name="android:colorBackground">#14151F</item>
+        <item name="android:statusBarColor">#14151F</item>
+        <item name="android:navigationBarColor">#1E1F2E</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 </resources>

@@ -1,17 +1,18 @@
 package com.messy.app.chat;
 
+import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.card.MaterialCardView;
 import com.messy.app.R;
 import com.messy.app.database.Message;
 
@@ -51,12 +52,31 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         holder.messageBodyTextView.setText(message.body);
         holder.messageTimestampTextView.setText(dateFormat.format(new Date(message.timestamp)));
 
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) holder.messageCardView.getLayoutParams();
-        layoutParams.gravity = outgoing ? Gravity.END : Gravity.START;
-        holder.messageCardView.setLayoutParams(layoutParams);
-        holder.messageCardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), outgoing ? R.color.message_outgoing : R.color.message_incoming));
-        holder.messageBodyTextView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), outgoing ? R.color.message_outgoing_text : R.color.message_incoming_text));
-        holder.messageTimestampTextView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), outgoing ? R.color.message_outgoing_text : R.color.message_incoming_text));
+        // Gravity
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) holder.messageBubble.getLayoutParams();
+        params.gravity = outgoing ? Gravity.END : Gravity.START;
+        holder.messageBubble.setLayoutParams(params);
+
+        // Constrain bubble max width to 75% of screen
+        int maxWidth = (int) (holder.itemView.getResources().getDisplayMetrics().widthPixels * 0.75f);
+        ViewGroup.LayoutParams lp = holder.messageBubble.getLayoutParams();
+        lp.width = maxWidth;
+        holder.messageBubble.setLayoutParams(lp);
+
+        // Background drawable + text colors
+        if (outgoing) {
+            holder.messageBubble.setBackgroundResource(R.drawable.bubble_outgoing);
+            holder.messageBodyTextView.setTextColor(
+                    ContextCompat.getColor(holder.itemView.getContext(), R.color.message_outgoing_text));
+            holder.messageTimestampTextView.setTextColor(
+                    ContextCompat.getColor(holder.itemView.getContext(), R.color.message_timestamp_outgoing));
+        } else {
+            holder.messageBubble.setBackgroundResource(R.drawable.bubble_incoming);
+            holder.messageBodyTextView.setTextColor(
+                    ContextCompat.getColor(holder.itemView.getContext(), R.color.message_incoming_text));
+            holder.messageTimestampTextView.setTextColor(
+                    ContextCompat.getColor(holder.itemView.getContext(), R.color.message_timestamp_incoming));
+        }
     }
 
     @Override
@@ -65,13 +85,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     }
 
     static class MessageViewHolder extends RecyclerView.ViewHolder {
-        final MaterialCardView messageCardView;
+        final LinearLayout messageBubble;
         final TextView messageBodyTextView;
         final TextView messageTimestampTextView;
 
         MessageViewHolder(@NonNull View itemView) {
             super(itemView);
-            messageCardView = itemView.findViewById(R.id.messageCardView);
+            messageBubble = itemView.findViewById(R.id.messageBubble);
             messageBodyTextView = itemView.findViewById(R.id.messageBodyTextView);
             messageTimestampTextView = itemView.findViewById(R.id.messageTimestampTextView);
         }
