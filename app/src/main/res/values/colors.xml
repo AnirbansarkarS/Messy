@@ -2,9 +2,43 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="message_outgoing">#FF1E88E5</color>
-    <color name="message_incoming">#FFF1F5F9</color>
-    <color name="message_incoming_text">#FF0F172A</color>
-    <color name="message_outgoing_text">#FFFFFFFF</color>
-    <color name="surface_soft">#FFF8FAFC</color>
+
+    <!-- Brand -->
+    <color name="color_primary">#5C6BC0</color>
+    <color name="color_primary_dark">#3949AB</color>
+    <color name="color_primary_container">#E8EAFF</color>
+    <color name="color_on_primary">#FFFFFF</color>
+    <color name="color_secondary">#7986CB</color>
+
+    <!-- Surfaces -->
+    <color name="color_background">#F5F6FA</color>
+    <color name="color_surface">#FFFFFF</color>
+    <color name="color_surface_variant">#ECEEF8</color>
+    <color name="surface_soft">#F5F6FA</color>
+
+    <!-- Text -->
+    <color name="color_on_surface">#1A1C2E</color>
+    <color name="color_on_surface_variant">#6B7280</color>
+
+    <!-- Messages -->
+    <color name="message_outgoing">#5C6BC0</color>
+    <color name="message_outgoing_alt">#7986CB</color>
+    <color name="message_incoming">#ECEEF8</color>
+    <color name="message_incoming_text">#1A1C2E</color>
+    <color name="message_outgoing_text">#FFFFFF</color>
+    <color name="message_timestamp_outgoing">#C5CAF0</color>
+    <color name="message_timestamp_incoming">#9BA3B8</color>
+
+    <!-- Avatar -->
+    <color name="avatar_bg_1">#5C6BC0</color>
+    <color name="avatar_bg_2">#26A69A</color>
+    <color name="avatar_bg_3">#EF5350</color>
+    <color name="avatar_bg_4">#FF7043</color>
+    <color name="avatar_bg_5">#AB47BC</color>
+
+    <!-- Divider -->
+    <color name="divider_color">#E8E8EE</color>
+
+    <!-- Toolbar -->
+    <color name="toolbar_bg">#5C6BC0</color>
 </resources>

@@ -3,14 +3,15 @@ package com.messy.app.chat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.messy.app.R;
 import com.messy.app.database.AppDatabase;
 import com.messy.app.database.Message;
@@ -29,7 +30,7 @@ public class ChatActivity extends AppCompatActivity {
     private MessageDao messageDao;
     private String contactId;
     private String contactName;
-    private EditText messageInputEditText;
+    private TextInputEditText messageInputEditText;
     private RecyclerView messagesRecyclerView;
 
     @Override
@@ -47,16 +48,37 @@ public class ChatActivity extends AppCompatActivity {
             contactName = SELF_ID.equals(contactId) ? getString(R.string.saved_messages) : contactId;
         }
 
-        TextView titleTextView = findViewById(R.id.chatTitleTextView);
-        titleTextView.setText(contactName);
+        // Toolbar
+        MaterialToolbar toolbar = findViewById(R.id.chatToolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
 
+        // Avatar initial in toolbar
+        TextView chatTitleTextView = findViewById(R.id.chatTitleTextView);
+        TextView chatAvatarInitial = findViewById(R.id.chatAvatarInitial);
+        chatTitleTextView.setText(contactName);
+        chatAvatarInitial.setText(contactName != null && !contactName.isEmpty()
+                ? String.valueOf(contactName.charAt(0)).toUpperCase()
+                : "?");
+
+        // Messages list
         messagesRecyclerView = findViewById(R.id.messagesRecyclerView);
         messagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         messagesRecyclerView.setAdapter(chatAdapter);
 
+        // Input
         messageInputEditText = findViewById(R.id.messageInputEditText);
-        Button sendButton = findViewById(R.id.sendButton);
+        FloatingActionButton sendButton = findViewById(R.id.sendButton);
         sendButton.setOnClickListener(v -> sendMessage());
+
+        // IME send action
+        messageInputEditText.setOnEditorActionListener((v, actionId, event) -> {
+            sendMessage();
+            return true;
+        });
 
         loadMessages();
     }
@@ -73,12 +95,17 @@ public class ChatActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(contactName)) {
             contactName = SELF_ID.equals(contactId) ? getString(R.string.saved_messages) : contactId;
         }
-        TextView titleTextView = findViewById(R.id.chatTitleTextView);
-        titleTextView.setText(contactName);
+        TextView chatTitleTextView = findViewById(R.id.chatTitleTextView);
+        TextView chatAvatarInitial = findViewById(R.id.chatAvatarInitial);
+        chatTitleTextView.setText(contactName);
+        chatAvatarInitial.setText(contactName != null && !contactName.isEmpty()
+                ? String.valueOf(contactName.charAt(0)).toUpperCase()
+                : "?");
         loadMessages();
     }
 
     private void sendMessage() {
+        if (messageInputEditText.getText() == null) return;
         String body = messageInputEditText.getText().toString().trim();
         if (body.isEmpty()) {
             return;
