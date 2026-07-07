@@ -60,18 +60,20 @@ public class SyncManager {
         this.pendingAcks = new HashSet<>();
         
         // Get local device ID
+        String id;
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter != null) {
             try {
                 @SuppressLint("MissingPermission")
                 String address = bluetoothAdapter.getAddress();
-                this.localDeviceId = address != null ? address : UUID.randomUUID().toString();
+                id = address != null ? address : UUID.randomUUID().toString();
             } catch (Exception e) {
-                this.localDeviceId = UUID.randomUUID().toString();
+                id = UUID.randomUUID().toString();
             }
         } else {
-            this.localDeviceId = UUID.randomUUID().toString();
+            id = UUID.randomUUID().toString();
         }
+        this.localDeviceId = id;
 
         Log.d(TAG, "SyncManager initialized with local ID: " + this.localDeviceId);
     }

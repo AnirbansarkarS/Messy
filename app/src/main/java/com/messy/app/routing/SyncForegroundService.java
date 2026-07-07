@@ -8,7 +8,6 @@ import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -17,11 +16,9 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.messy.app.R;
-import com.messy.app.database.AppDatabase;
 import com.messy.app.network.bluetooth.BluetoothConnectionService;
 import com.messy.app.network.bluetooth.BluetoothDiscovery;
 
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -37,32 +34,30 @@ public class SyncForegroundService extends Service {
 
     private BluetoothDiscovery bluetoothDiscovery;
     private BluetoothConnectionService connectionService;
-    private AppDatabase database;
     private Handler handler;
-    private String localDeviceId;
     private boolean isRunning = false;
 
+    @SuppressLint({"MissingPermission", "HardwareIds", "LocalMacAddress"})
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "SyncForegroundService created");
 
         handler = new Handler(Looper.getMainLooper());
-        database = AppDatabase.getInstance(this);
 
-        // Get local device ID (use Bluetooth address or UUID)
+        // Get local device ID
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        String address;
         if (bluetoothAdapter != null) {
             try {
-                @SuppressLint("MissingPermission")
-                String address = bluetoothAdapter.getAddress();
-                localDeviceId = address != null ? address : UUID.randomUUID().toString();
+                address = bluetoothAdapter.getAddress();
             } catch (Exception e) {
-                localDeviceId = UUID.randomUUID().toString();
+                address = null;
             }
         } else {
-            localDeviceId = UUID.randomUUID().toString();
+            address = null;
         }
+        String localDeviceId = address != null ? address : UUID.randomUUID().toString();
 
         Log.d(TAG, "Local device ID: " + localDeviceId);
 
@@ -112,12 +107,18 @@ public class SyncForegroundService extends Service {
      * Initialize Bluetooth discovery and connection services.
      */
     private void initBluetoothServices() {
-        bluetoothDiscovery = new BluetoothDiscovery(new BluetoothDiscovery.DiscoveryCallback() {
+        bluetoothDiscovery = new BluetoothDiscovery(this, new BluetoothDiscovery.DiscoveryCallback() {
+            @SuppressLint("MissingPermission")
             @Override
-            public void onDeviceDiscovered(BluetoothDevice device) {
+            public void onDeviceFound(BluetoothDevice device) {
                 Log.d(TAG, "Device discovered: " + device.getName());
                 // Trigger connection attempt
                 connectAndSync(device);
+            }
+
+            @Override
+            public void onDiscoveryStarted() {
+                Log.d(TAG, "Discovery started");
             }
 
             @Override
@@ -132,6 +133,7 @@ public class SyncForegroundService extends Service {
         });
 
         connectionService = new BluetoothConnectionService(new BluetoothConnectionService.ConnectionCallback() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onConnectionSuccess(BluetoothDevice device) {
                 Log.d(TAG, "Connected to: " + device.getName());
@@ -211,18 +213,16 @@ public class SyncForegroundService extends Service {
      * Create notification channel for foreground service (Android 8+).
      */
     private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Mesh Sync Service",
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-            channel.setDescription("Mesh message synchronization");
+        NotificationChannel channel = new NotificationChannel(
+                CHANNEL_ID,
+                "Mesh Sync Service",
+                NotificationManager.IMPORTANCE_DEFAULT
+        );
+        channel.setDescription("Mesh message synchronization");
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(channel);
-            }
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(channel);
         }
     }
 
@@ -241,6 +241,8 @@ public class SyncForegroundService extends Service {
     /**
      * Update the foreground service notification.
      */
+    @SuppressWarnings("SameParameterValue")
+    @SuppressLint({"MissingPermission", "NotificationPermission"})
     private void updateNotification(String text) {
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         if (notificationManager != null) {
