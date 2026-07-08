@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     // P2P Fields
     private TextView p2pStatusTextView;
+    private View p2pStatusIndicatorDot;
     private LinearLayout p2pDevicesListContainer;
     private Button p2pSendHelloButton;
 
@@ -84,17 +85,27 @@ public class MainActivity extends AppCompatActivity {
 
         // FAB
         ExtendedFloatingActionButton fab = findViewById(R.id.openSavedMessagesButton);
-        fab.setOnClickListener(v -> openSavedMessages());
+        applyClickAnimation(fab, this::openSavedMessages);
 
         // P2P HUD Setup
         p2pStatusTextView = findViewById(R.id.p2pStatusTextView);
+        p2pStatusIndicatorDot = findViewById(R.id.p2pStatusIndicatorDot);
         p2pDevicesListContainer = findViewById(R.id.p2pDevicesListContainer);
         p2pSendHelloButton = findViewById(R.id.p2pSendHelloButton);
 
-        findViewById(R.id.p2pPermsButton).setOnClickListener(v -> checkAndRequestPermissions());
-        findViewById(R.id.p2pStartBtButton).setOnClickListener(v -> startBluetoothWork());
-        findViewById(R.id.p2pStartWifiButton).setOnClickListener(v -> startWifiDirectWork());
-        p2pSendHelloButton.setOnClickListener(v -> sendTestHello());
+        applyClickAnimation(findViewById(R.id.p2pPermsButton), this::checkAndRequestPermissions);
+        applyClickAnimation(findViewById(R.id.p2pStartBtButton), this::startBluetoothWork);
+        applyClickAnimation(findViewById(R.id.p2pStartWifiButton), this::startWifiDirectWork);
+        applyClickAnimation(p2pSendHelloButton, this::sendTestHello);
+
+        // Start glowing LED pulse animation
+        if (p2pStatusIndicatorDot != null) {
+            android.view.animation.AlphaAnimation pulse = new android.view.animation.AlphaAnimation(0.4f, 1.0f);
+            pulse.setDuration(1200);
+            pulse.setRepeatMode(android.view.animation.Animation.REVERSE);
+            pulse.setRepeatCount(android.view.animation.Animation.INFINITE);
+            p2pStatusIndicatorDot.startAnimation(pulse);
+        }
 
         // Initialize Services
         initP2pServices();
@@ -209,9 +220,38 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void applyClickAnimation(View view, Runnable action) {
+        if (view == null) return;
+        view.setOnClickListener(v -> {
+            v.animate().scaleX(0.95f).scaleY(0.95f).setDuration(80).withEndAction(() -> {
+                v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(80).start();
+                if (action != null) {
+                    action.run();
+                }
+            }).start();
+        });
+    }
+
     private void updateP2pStatus(String status) {
         if (p2pStatusTextView != null) {
             p2pStatusTextView.setText("Status: " + status);
+        }
+        if (p2pStatusIndicatorDot != null) {
+            int color;
+            String lower = status.toLowerCase();
+            if (lower.contains("connected")) {
+                color = android.graphics.Color.parseColor("#00F5D4"); // Neon cyan for active connection
+            } else if (lower.contains("scanning") || lower.contains("scan") || lower.contains("listening")) {
+                color = android.graphics.Color.parseColor("#8E2DE2"); // Neon violet for scanning/searching
+            } else if (lower.contains("failed") || lower.contains("lost") || lower.contains("error")) {
+                color = android.graphics.Color.parseColor("#FF007F"); // Hot pink for error states
+            } else {
+                color = android.graphics.Color.parseColor("#FF9F43"); // Orange for idle or initial
+            }
+            android.graphics.drawable.GradientDrawable bg = (android.graphics.drawable.GradientDrawable) p2pStatusIndicatorDot.getBackground();
+            if (bg != null) {
+                bg.setColor(color);
+            }
         }
     }
 

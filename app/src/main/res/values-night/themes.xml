@@ -1,15 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.Messy" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">#7986CB</item>
-        <item name="colorPrimaryContainer">#2C3275</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSecondary">#9FA8DA</item>
-        <item name="colorSurface">#1E1F2E</item>
-        <item name="colorSurfaceVariant">#2A2B3D</item>
-        <item name="colorOnSurface">#E8E8F0</item>
-        <item name="android:colorBackground">#14151F</item>
-        <item name="android:statusBarColor">#14151F</item>
-        <item name="android:navigationBarColor">#1E1F2E</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryContainer">@color/color_primary_container</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorSurfaceVariant">@color/color_surface_variant</item>
+        <item name="colorOnSurface">@color/color_on_surface</item>
+        <item name="android:colorBackground">@color/color_background</item>
+        <item name="android:statusBarColor">@color/color_primary_dark</item>
+        <item name="android:navigationBarColor">@color/color_surface</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 </resources>

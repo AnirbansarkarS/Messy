@@ -46,9 +46,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant">
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/color_primary_container"
+                app:strokeWidth="1.5dp"
+                app:strokeColor="@color/color_secondary">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -59,18 +60,34 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="P2P Testing Panel"
+                        android:text="P2P Testing HUD"
+                        android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                        android:textColor="@color/color_primary" />
+                        android:textColor="@color/color_secondary" />
 
-                    <TextView
-                        android:id="@+id/p2pStatusTextView"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Status: Idle"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                        android:textColor="@color/color_on_surface" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <View
+                            android:id="@+id/p2pStatusIndicatorDot"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/status_pulse_circle" />
+
+                        <TextView
+                            android:id="@+id/p2pStatusTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Status: Idle"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="@color/color_on_surface" />
+
+                    </LinearLayout>
 
                     <!-- Actions Row -->
                     <HorizontalScrollView
@@ -86,9 +103,11 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/p2pPermsButton"
-                                style="@style/Widget.Material3.Button.TextButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                app:strokeColor="@color/color_on_surface_variant"
+                                android:textColor="@color/color_on_surface"
                                 android:text="Grant Perms" />
 
                             <com.google.android.material.button.MaterialButton
@@ -97,6 +116,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
+                                android:textColor="@color/color_secondary"
                                 android:text="Start BT" />
 
                             <com.google.android.material.button.MaterialButton
@@ -105,6 +125,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
+                                android:textColor="@color/color_secondary"
                                 android:text="P2P Scan" />
 
                             <com.google.android.material.button.MaterialButton
@@ -183,6 +204,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:overScrollMode="never"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:layoutAnimation="@anim/layout_animation_fall_down"
                 android:visibility="gone"
                 tools:listitem="@layout/item_conversation" />
 

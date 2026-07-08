@@ -93,29 +93,27 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_message" />
 
-    <!-- Input bar pinned at bottom -->
+    <!-- Input bar floating at bottom -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/color_surface"
-        android:elevation="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
         android:orientation="horizontal"
-        android:padding="10dp"
         android:gravity="center_vertical">
 
-        <!-- Text input -->
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Text input container -->
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:boxCornerRadiusBottomEnd="24dp"
-            app:boxCornerRadiusBottomStart="24dp"
-            app:boxCornerRadiusTopEnd="24dp"
-            app:boxCornerRadiusTopStart="24dp"
-            app:boxStrokeColor="@color/color_primary_container"
-            app:boxBackgroundColor="@color/color_surface_variant"
-            style="@style/Widget.Material3.TextInputLayout.FilledBox">
+            android:background="@drawable/input_pill_bg"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/messageInputEditText"
@@ -123,27 +121,29 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="@string/type_message_hint"
+                android:textColorHint="@color/color_on_surface_variant"
+                android:textColor="@color/color_on_surface"
                 android:imeOptions="actionSend"
                 android:inputType="textMultiLine"
                 android:maxLines="4"
                 android:minLines="1"
-                android:paddingVertical="12dp"
+                android:paddingVertical="10dp"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
         <!-- Send button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/sendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="12dp"
             android:contentDescription="@string/send"
             app:backgroundTint="@color/color_primary"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_send"
             app:tint="@color/white"
-            app:elevation="2dp" />
+            app:elevation="4dp" />
 
     </LinearLayout>
 
