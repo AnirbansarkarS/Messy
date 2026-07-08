@@ -72,7 +72,7 @@ public class ChatActivity extends AppCompatActivity {
         // Input
         messageInputEditText = findViewById(R.id.messageInputEditText);
         FloatingActionButton sendButton = findViewById(R.id.sendButton);
-        sendButton.setOnClickListener(v -> sendMessage());
+        applyClickAnimation(sendButton, this::sendMessage);
 
         // IME send action
         messageInputEditText.setOnEditorActionListener((v, actionId, event) -> {
@@ -137,6 +137,18 @@ public class ChatActivity extends AppCompatActivity {
                     messagesRecyclerView.scrollToPosition(messages.size() - 1);
                 }
             });
+        });
+    }
+
+    private void applyClickAnimation(android.view.View view, Runnable action) {
+        if (view == null) return;
+        view.setOnClickListener(v -> {
+            v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(80).withEndAction(() -> {
+                v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(80).start();
+                if (action != null) {
+                    action.run();
+                }
+            }).start();
         });
     }
 }
