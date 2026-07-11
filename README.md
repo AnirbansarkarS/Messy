@@ -46,7 +46,10 @@ This work contributes:
 Messy is structured as four cooperating layers: a Material 3 UI layer, a local persistence layer, a routing/forwarding layer, and a dual-channel network discovery layer.
 
 > 📌 **Diagram placement: [Figure 1 — System Architecture Diagram]**
-> *Insert your layered architecture diagram here (UI → Routing/Forwarding Engine → Encryption Module → Network Layer → Local Database).*
+>
+> <p align="center"><img src="diagrams/system_architecture.png" alt="Figure 1 — System Architecture" width="700"/></p>
+>
+> *Figure 1 — System Architecture Diagram.*
 
 ### 3.1 Presentation Layer
 - Material 3 UI with custom toolbars, initials-based avatars, and asymmetric chat bubbles for incoming/outgoing messages, implemented via `ChatActivity`, `ChatAdapter`, and `ConversationAdapter`.
@@ -56,7 +59,10 @@ Messy is structured as four cooperating layers: a Material 3 UI layer, a local p
 - Each `Message` carries an ID, sender, receiver, body, timestamp, delivery status, and TTL, enabling deduplication and expiry independent of any network state.
 
 > 📌 **Diagram placement: [Figure 2 — Data Model / Entity Diagram]**
-> *Insert your `Message` entity / Room schema diagram here.*
+>
+> <p align="center"><img src="diagrams/datamodel_entity.png" alt="Figure 2 — Data Model / Entity Diagram" width="600"/></p>
+>
+> *Figure 2 — Data Model / Entity Diagram.*
 
 ### 3.3 Network Discovery Layer
 Two independent, parallel discovery channels are implemented:
@@ -65,13 +71,19 @@ Two independent, parallel discovery channels are implemented:
 - **Wi-Fi Direct**: `WifiDirectManager` wraps `WifiP2pManager` to provide a backup discovery path independent of Bluetooth radio limitations.
 
 > 📌 **Diagram placement: [Figure 3 — Peer Discovery & Handshake Sequence Diagram]**
-> *Insert your sequence diagram here (device discovery → ID exchange → message-list sync → transfer).*
+>
+> <p align="center"><img src="diagrams/peer_discovery&handshake.png" alt="Figure 3 — Peer Discovery & Handshake Sequence Diagram" width="700"/></p>
+>
+> *Figure 3 — Peer Discovery & Handshake Sequence Diagram.*
 
 ### 3.4 Transport & Serialization
 Once a socket is established, `ObjectOutputStream`/`ObjectInputStream` streams serialize and deserialize `Message` objects directly across the Bluetooth link, avoiding a custom wire-format for this stage of the prototype.
 
 > 📌 **Diagram placement: [Figure 4 — Message Hop Flow Diagram]**
-> *Insert your sender → relay → receiver (+ ACK return path) diagram here.*
+>
+> <p align="center"><img src="diagrams/message_hop_flow.png" alt="Figure 4 — Message Hop Flow Diagram" width="700"/></p>
+>
+> *Figure 4 — Message Hop Flow Diagram.*
 
 ---
 
@@ -105,7 +117,10 @@ app/src/main/java/com/messy/app/
 Discovery, connection, and I/O run off the main thread via `AcceptThread`, `ConnectThread`, and `AppExecutors`, keeping the UI responsive during blocking socket operations — a standard requirement for Android networking code.
 
 > 📌 **Diagram placement: [Figure 8 — App Screens / UI Flow Diagram]**
-> *Insert your Conversation List → Chat Screen → Send → Delivery Status flow diagram here.*
+>
+> <p align="center"><img src="diagrams/Screenshot1.png" alt="Figure 8 — App Screens / UI Flow Diagram" width="650"/></p>
+>
+> *Figure 8 — App Screens / UI Flow Diagram.*
 
 ---
 
@@ -129,7 +144,10 @@ Because Android emulators do not expose physical Bluetooth radios, all discovery
 This protocol isolates each stage of the discovery pipeline (advertise → scan → connect → transfer → receive) so that a failure at any step can be attributed precisely, rather than only observing an end-to-end pass/fail result.
 
 > 📌 **Diagram placement: [Figure 6 — Network Topology / Simulation Snapshot]** *(if extended to multi-node testing)*
-> *Insert a topology snapshot here if you run 3+ device tests beyond the 2-device protocol above.*
+>
+> <p align="center"><img src="diagrams/simulation.png" alt="Figure 6 — Network Topology / Simulation Snapshot" width="700"/></p>
+>
+> *Figure 6 — Network Topology / Simulation Snapshot.*
 
 ### 5.2 Instrumentation
 Logcat tagging (`/P2PVerify`) was used throughout to capture timestamps for each discovery/connection/transfer event, forming the basis for any latency measurements reported in Section 6.
@@ -147,10 +165,17 @@ Logcat tagging (`/P2PVerify`) was used throughout to capture timestamps for each
 - (If simulator built) Delivery ratio, average hop count, and overhead ratio across routing strategies
 
 > 📌 **Diagram placement: [Figure 7 — Results Graphs]**
-> *Insert your delivery ratio / latency / overhead comparison graphs here once experiments are run.*
+>
+> <p align="center"><img src="diagrams/Screenshot2.png" alt="Figure 7 — Results Graphs" width="700"/></p>
+>
+> *Figure 7 — Results Graphs.*
+
 
 > 📌 **Diagram placement: [Figure 5 — Routing Algorithm Comparison Diagram]**
-> *Insert your Flooding vs. Spray-and-Wait vs. Contact-history comparison diagram here (relevant once multiple routing strategies are implemented and compared).*
+>
+> <p align="center"><img src="diagrams/routing_algo.png" alt="Figure 5 — Routing Algorithm Comparison Diagram" width="700"/></p>
+>
+> *Figure 5 — Routing Algorithm Comparison Diagram.*
 
 ---
 
